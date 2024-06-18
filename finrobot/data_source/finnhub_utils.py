@@ -2,12 +2,12 @@ import os
 import finnhub
 import pandas as pd
 import json
-import random
 from typing import Annotated
 from collections import defaultdict
 from functools import wraps
 from datetime import datetime
 from ..utils import decorate_all_methods, save_output, SavePathType
+import secrets
 
 
 def init_finnhub_client(func):
@@ -82,7 +82,7 @@ class FinnHubUtils:
         ]
         # Randomly select a subset of news if the number of news exceeds the maximum
         if len(news) > max_news_num:
-            news = random.choices(news, k=max_news_num)
+            news = secrets.SystemRandom().choices(news, k=max_news_num)
         news.sort(key=lambda x: x["date"])
         output = pd.DataFrame(news)
         save_output(output, f"company news of {symbol}", save_path=save_path)
