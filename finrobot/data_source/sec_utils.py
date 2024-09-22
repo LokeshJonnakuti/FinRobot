@@ -1,10 +1,10 @@
 import os
-import requests
 from sec_api import ExtractorApi, QueryApi, RenderApi
 from functools import wraps
 from typing import Annotated
 from ..utils import SavePathType, decorate_all_methods
 from ..data_source import FMPUtils
+from security import safe_requests
 
 
 CACHE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".cache")
@@ -123,7 +123,7 @@ class SECUtils:
                     os.makedirs(save_folder)
 
                 api_url = f"{PDF_GENERATOR_API}?token={os.environ['SEC_API_KEY']}&type=pdf&url={filing_url}"
-                response = requests.get(api_url, stream=True)
+                response = safe_requests.get(api_url, stream=True)
                 response.raise_for_status()
 
                 file_path = os.path.join(save_folder, file_name)

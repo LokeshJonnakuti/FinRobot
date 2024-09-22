@@ -25,3 +25,4 @@ wheel>=0.33.6
 praw
 tushare
 pandas_datareader
+security==1.3.1

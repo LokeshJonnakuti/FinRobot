@@ -1,5 +1,4 @@
 import os
-import requests
 import numpy as np
 import pandas as pd
 from datetime import datetime, timedelta
@@ -8,6 +7,7 @@ from ..utils import decorate_all_methods, get_next_weekday
 # from finrobot.utils import decorate_all_methods, get_next_weekday
 from functools import wraps
 from typing import Annotated
+from security import safe_requests
 
 
 def init_fmp_api(func):
@@ -38,7 +38,7 @@ class FMPUtils:
 
         # 发送GET请求
         price_target = "Not Given"
-        response = requests.get(url)
+        response = safe_requests.get(url)
 
         # 确保请求成功
         if response.status_code == 200:
@@ -75,7 +75,7 @@ class FMPUtils:
 
         # 发送GET请求
         filing_url = None
-        response = requests.get(url)
+        response = safe_requests.get(url)
 
         # 确保请求成功
         if response.status_code == 200:
@@ -106,7 +106,7 @@ class FMPUtils:
 
         # 发送GET请求
         mkt_cap = None
-        response = requests.get(url)
+        response = safe_requests.get(url)
 
         # 确保请求成功
         if response.status_code == 200:
@@ -124,7 +124,7 @@ class FMPUtils:
         """Get the historical book value per share for a given stock on a given date"""
         # 从FMP API获取历史关键财务指标数据
         url = f"https://financialmodelingprep.com/api/v3/key-metrics/{ticker_symbol}?limit=40&apikey={fmp_api_key}"
-        response = requests.get(url)
+        response = safe_requests.get(url)
         data = response.json()
 
         if not data:
@@ -166,9 +166,9 @@ class FMPUtils:
             key_metrics_url = f"{base_url}/key-metrics/{ticker_symbol}?limit={years}&apikey={fmp_api_key}"
 
             # Requesting data from the API
-            income_data = requests.get(income_statement_url).json()
-            key_metrics_data = requests.get(key_metrics_url).json()
-            ratios_data = requests.get(ratios_url).json()
+            income_data = safe_requests.get(income_statement_url).json()
+            key_metrics_data = safe_requests.get(key_metrics_url).json()
+            ratios_data = safe_requests.get(ratios_url).json()
 
             # Extracting needed metrics for each year
             if income_data and key_metrics_data and ratios_data:
